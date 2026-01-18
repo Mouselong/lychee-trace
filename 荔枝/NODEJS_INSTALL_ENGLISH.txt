@@ -1,0 +1,65 @@
+Node.js Installation Guide - Add to PATH
+====================================
+
+DOWNLOAD LINK:
+https://nodejs.org/dist/v18.18.2/node-v18.18.2-x64.msi
+
+INSTALLATION STEPS:
+====================================
+
+1. Double-click the downloaded installer (node-v18.18.2-x64.msi)
+
+2. When installation wizard starts, click "Next"
+
+3. Read license agreement, check "I accept the terms in the License Agreement"
+   Click "Next"
+
+4. Choose installation location (recommended: use default location)
+   Click "Next"
+
+5. [IMPORTANT STEP] Custom Setup:
+   ====================================
+   On this page, you will see:
+   ☑ Node.js runtime
+   ☑ npm package manager
+   ☑ Add to PATH              ← [MUST CHECK THIS!]
+   ☑ Add to environment variables
+
+   MAKE SURE "Add to PATH" IS CHECKED!
+   ====================================
+
+6. Click "Next"
+
+7. Click "Install" to begin installation
+
+8. Wait for installation to complete, click "Finish"
+
+9. [IMPORTANT] Restart computer or command prompt
+   ====================================
+   After installation, you MUST:
+   - Restart your computer, OR
+   - Close ALL command prompt windows and open new ones
+   ====================================
+
+VERIFY INSTALLATION:
+====================================
+Open a NEW command prompt and run:
+node --version
+npm --version
+
+If you see version numbers, installation is successful!
+
+TROUBLESHOOTING:
+====================================
+❌ If you see "'node' is not recognized"
+→ PATH was not added correctly, please reinstall and check "Add to PATH"
+
+❌ If you forgot to check "Add to PATH" during installation
+→ You need to manually add environment variables (see previous instructions)
+
+✅ SUCCESS INDICATORS:
+node --version shows v18.x.x
+npm --version shows 9.x.x
+
+====================================
+After successful installation, double-click install_guide.bat to start using the system!

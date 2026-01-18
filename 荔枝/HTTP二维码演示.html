@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP二维码演示 - 无需谷歌服务</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hero-section {
+            background: white;
+            border-radius: 15px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 28px;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .server-status {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .server-status h3 {
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .server-url {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .start-server {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+
+        .start-server:hover {
+            transform: translateY(-2px);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .product-name {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .product-id {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .product-content {
+            padding: 30px;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .qr-image {
+            width: 180px;
+            height: 180px;
+            border: 3px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .qr-label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .url-display {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: center;
+            margin: 10px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .info-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .action-btn {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #218838;
+        }
+
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+
+        .action-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .features-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .feature-item h4 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌐 HTTP二维码演示</h1>
+        <p>无需谷歌服务，直接跳转到溯源页面</p>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <h2 class="hero-title">🚀 零依赖二维码解决方案</h2>
+            <p class="hero-desc">
+                使用标准HTTP URL，完全兼容所有扫码App，无需任何外部服务依赖。
+                扫描即可直接跳转到溯源页面。
+            </p>
+
+            <div class="server-status">
+                <h3>🖥️ 本地服务器状态</h3>
+                <div class="server-url">http://localhost:3000</div>
+                <p>启动服务器后，二维码将自动跳转到溯源页面</p>
+            </div>
+
+            <button onclick="startServer()" class="start-server">
+                🚀 一键启动溯源服务器
+            </button>
+
+            <div style="margin-top: 20px; font-size: 14px; color: #666;">
+                如果按钮无效，请双击运行 "启动溯源服务器.bat" 文件
+            </div>
+        </div>
+
+        <div class="products-grid">
+            <!-- 妃子笑荔枝 -->
+            <div class="product-card">
+                <div class="product-header">
+                    <h3 class="product-name">🍈 妃子笑荔枝</h3>
+                    <div class="product-id">ID: LC20240117001</div>
+                </div>
+
+                <div class="product-content">
+                    <div class="qr-section">
+                        <div class="qr-label">✅ HTTP标准二维码</div>
+                        <img src="妃子笑荔枝_HTTP二维码.png" alt="HTTP二维码" class="qr-image">
+                        <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                            扫描后直接跳转，无需任何服务
+                        </div>
+                    </div>
+
+                    <div class="url-display">
+                        http://localhost:3000/trace/LC20240117001
+                    </div>
+
+                    <ul class="info-list">
+                        <li>
+                            <span class="info-label">🌍 产地:</span>
+                            <span class="info-value">广东省茂名市电白区</span>
+                        </li>
+                        <li>
+                            <span class="info-label">👨‍🌾 农户:</span>
+                            <span class="info-value">李师傅</span>
+                        </li>
+                        <li>
+                            <span class="info-label">📅 采摘日期:</span>
+                            <span class="info-value">2024-06-15</span>
+                        </li>
+                    </ul>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="http://localhost:3000/trace/LC20240117001" class="action-btn">🌐 在线查看溯源</a>
+                        <a href="妃子笑荔枝_HTTP二维码.png" download class="action-btn secondary">📥 下载二维码</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 桂味荔枝 -->
+            <div class="product-card">
+                <div class="product-header">
+                    <h3 class="product-name">🍈 桂味荔枝</h3>
+                    <div class="product-id">ID: LC20240117002</div>
+                </div>
+
+                <div class="product-content">
+                    <div class="qr-section">
+                        <div class="qr-label">✅ HTTP标准二维码</div>
+                        <img src="桂味荔枝_HTTP二维码.png" alt="HTTP二维码" class="qr-image">
+                        <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                            扫描后直接跳转，无需任何服务
+                        </div>
+                    </div>
+
+                    <div class="url-display">
+                        http://localhost:3000/trace/LC20240117002
+                    </div>
+
+                    <ul class="info-list">
+                        <li>
+                            <span class="info-label">🌍 产地:</span>
+                            <span class="info-value">广东省湛江市徐闻县</span>
+                        </li>
+                        <li>
+                            <span class="info-label">👨‍🌾 农户:</span>
+                            <span class="info-value">王阿姨</span>
+                        </li>
+                        <li>
+                            <span class="info-label">📅 采摘日期:</span>
+                            <span class="info-value">2024-06-20</span>
+                        </li>
+                    </ul>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="http://localhost:3000/trace/LC20240117002" class="action-btn">🌐 在线查看溯源</a>
+                        <a href="桂味荔枝_HTTP二维码.png" download class="action-btn secondary">📥 下载二维码</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h3 class="features-title">🎯 核心优势</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🚫</div>
+                    <h4>零外部依赖</h4>
+                    <p>无需谷歌服务或其他AR服务，完全本地化解决方案</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <h4>100%兼容</h4>
+                    <p>支持所有扫码App和浏览器，标准HTTP协议</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h4>即时跳转</h4>
+                    <p>扫描后立即跳转到溯源页面，无延迟</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <h4>本地安全</h4>
+                    <p>所有数据本地处理，无隐私泄露风险</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>荔链直达 - 零依赖二维码溯源系统 | <a href="README_二维码.txt">技术文档</a></p>
+    </div>
+
+    <script>
+        function startServer() {
+            // 尝试启动服务器
+            alert('请双击运行 "启动溯源服务器.bat" 文件来启动服务器，然后刷新此页面。');
+        }
+    </script>
+</body>
+</html>

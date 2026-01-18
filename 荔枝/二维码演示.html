@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>荔枝二维码演示</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .qr-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+            transition: transform 0.3s;
+        }
+        .qr-card:hover {
+            transform: translateY(-5px);
+        }
+        .qr-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .qr-image {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            display: inline-block;
+            border: 1px solid #e9ecef;
+        }
+        .qr-image img {
+            width: 150px;
+            height: 150px;
+        }
+        .product-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #5a6fd8;
+        }
+        .instructions {
+            background: #e8f5e8;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+        }
+        .instructions h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+        .instructions ol {
+            color: #333;
+            line-height: 1.8;
+            margin: 0;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        .test-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .test-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌰 荔枝二维码演示</h1>
+        <p class="subtitle">扫描二维码查看完整的荔枝溯源信息</p>
+
+        <div class="qr-grid">
+            <!-- 妃子笑荔枝 -->
+            <div class="qr-card">
+                <h3>🍈 妃子笑荔枝</h3>
+                <div class="product-info">
+                    <strong>产品ID:</strong> LC20240117001<br>
+                    <strong>产地:</strong> 广东省茂名市电白区<br>
+                    <strong>农户:</strong> 李师傅
+                </div>
+                <div class="qr-image">
+                    <img src="妃子笑荔枝_溯源二维码.png" alt="妃子笑荔枝二维码">
+                </div>
+                <a href="妃子笑荔枝_溯源二维码.png" download class="download-btn">下载二维码</a>
+            </div>
+
+            <!-- 桂味荔枝 -->
+            <div class="qr-card">
+                <h3>🍈 桂味荔枝</h3>
+                <div class="product-info">
+                    <strong>产品ID:</strong> LC20240117002<br>
+                    <strong>产地:</strong> 广东省湛江市徐闻县<br>
+                    <strong>农户:</strong> 王阿姨
+                </div>
+                <div class="qr-image">
+                    <img src="桂味荔枝_溯源二维码.png" alt="桂味荔枝二维码">
+                </div>
+                <a href="桂味荔枝_溯源二维码.png" download class="download-btn">下载二维码</a>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📱 使用说明</h3>
+            <ol>
+                <li>用手机相机扫描上面的二维码</li>
+                <li>会自动跳转到溯源查询页面</li>
+                <li>查看完整的种植、加工、物流信息</li>
+                <li>验证区块链溯源信息</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 测试溯源页面</h3>
+            <p style="margin-bottom: 15px;">如果二维码无法扫描，也可以直接点击下方链接测试：</p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <a href="溯源查询.html?id=LC20240117001" class="download-btn" style="background: #28a745;">测试妃子笑荔枝溯源</a>
+                <a href="溯源查询.html?id=LC20240117002" class="download-btn" style="background: #28a745;">测试桂味荔枝溯源</a>
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.8); border-radius: 8px;">
+                <h4 style="margin: 0 0 10px 0; color: #856404;">🔍 手动测试</h4>
+                <p style="margin: 0; font-size: 14px;">打开溯源查询页面后，在浏览器地址栏中手动添加参数测试：</p>
+                <div style="margin-top: 10px; font-family: monospace; font-size: 12px; color: #666;">
+                    溯源查询.html?id=LC20240117001<br>
+                    溯源查询.html?id=LC20240117002
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

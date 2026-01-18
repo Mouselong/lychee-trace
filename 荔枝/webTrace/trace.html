@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农产品溯源查询平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result-section {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .product-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .product-title {
+            font-size: 28px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .product-id {
+            background: #f8f9fa;
+            color: #666;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 16px;
+        }
+
+        .trace-timeline {
+            margin-bottom: 30px;
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            color: #28a745;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #28a745;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #28a745;
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 3px solid #28a745;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #28a745;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .timeline-time {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .timeline-desc {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .blockchain-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .blockchain-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .hash-display {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            margin: 15px 0;
+        }
+
+        .verification-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #28a745;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .error-section {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .error-section h3 {
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌰 农产品溯源查询平台</h1>
+        <p>区块链技术保障食品安全，让每一颗荔枝都有身份证</p>
+    </div>
+
+    <div class="container">
+        <div class="search-section">
+            <h2 style="margin-bottom: 20px; color: #333;">请输入溯源码查询</h2>
+            <input type="text" id="traceId" class="search-input" placeholder="请输入溯源码..." value="">
+            <br>
+            <button onclick="searchTrace()" class="search-btn">查询溯源信息</button>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div>正在查询中...</div>
+        </div>
+
+        <div id="result" class="result-section">
+            <!-- 结果将在这里显示 -->
+        </div>
+
+        <div id="error" class="error-section">
+            <h3>❌ 查询失败</h3>
+            <p id="error-message">未找到相关溯源信息</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>荔链直达 - 区块链溯源平台 | 技术支持：农产品质量安全追溯系统</p>
+    </div>
+
+    <script>
+        // 从URL参数获取溯源码
+        function getTraceIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedId = urlParams.get('id');
+            if (encodedId) {
+                try {
+                    // 尝试Base64解码
+                    return atob(encodedId);
+                } catch (e) {
+                    // 如果解码失败，返回原值
+                    return encodedId;
+                }
+            }
+            return null;
+        }
+
+        // 产品溯源数据
+        const traceData = {
+            'LC20240117001': {
+                name: '妃子笑荔枝',
+                id: 'LC20240117001',
+                location: '广东省茂名市电白区',
+                farmer: '李师傅',
+                harvestDate: '2024-06-15',
+                planting: [
+                    { time: '2024-01-15', desc: '开始种植，选用优质妃子笑荔枝种苗' },
+                    { time: '2024-03-20', desc: '施用有机肥料，严格控制农药使用' },
+                    { time: '2024-06-15', desc: '手工采摘，成熟度达95%以上' }
+                ],
+                processing: [
+                    { time: '2024-06-15 14:00', desc: '进入冷链运输，温度控制在4-6°C' },
+                    { time: '2024-06-15 18:00', desc: '到达加工厂，开始分级筛选' },
+                    { time: '2024-06-15 20:00', desc: '真空预冷处理，锁住新鲜度' }
+                ],
+                logistics: [
+                    { time: '2024-06-16 08:00', desc: '发往广州批发市场，全程冷链运输' },
+                    { time: '2024-06-16 12:00', desc: '到达广州，温度监测正常' },
+                    { time: '2024-06-17', desc: '进入零售渠道' }
+                ],
+                blockchain: {
+                    hash: 'a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef',
+                    status: '已验证',
+                    timestamp: '2024-06-15 10:30:25'
+                }
+            },
+            'LC20240117002': {
+                name: '桂味荔枝',
+                id: 'LC20240117002',
+                location: '广东省湛江市徐闻县',
+                farmer: '王阿姨',
+                harvestDate: '2024-06-20',
+                planting: [
+                    { time: '2024-01-20', desc: '开始种植，选用当地优质桂味荔枝品种' },
+                    { time: '2024-04-10', desc: '采用生态种植，无公害生产' },
+                    { time: '2024-06-20', desc: '适时采摘，保证最佳口感' }
+                ],
+                processing: [
+                    { time: '2024-06-20 15:30', desc: '快速预冷，保持果实新鲜' },
+                    { time: '2024-06-20 19:00', desc: '专业分级，优果优价' },
+                    { time: '2024-06-20 21:00', desc: '包装入库，准备发货' }
+                ],
+                logistics: [
+                    { time: '2024-06-21 07:00', desc: '冷链运输发往深圳市场' },
+                    { time: '2024-06-21 11:30', desc: '到达深圳物流中心' },
+                    { time: '2024-06-22', desc: '配送至各大超市' }
+                ],
+                blockchain: {
+                    hash: 'f9e8d7c6b5a493827261514030201f9e8d7c6b5a493827261514030201f9e8d7c6',
+                    status: '已验证',
+                    timestamp: '2024-06-20 09:15:40'
+                }
+            }
+        };
+
+        // 渲染溯源结果
+        function renderResult(product) {
+            return `
+                <div class="product-header">
+                    <h2 class="product-title">${product.name}</h2>
+                    <div class="product-id">溯源码: ${product.id}</div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-label">🌍 产地信息</div>
+                        <div class="info-value">${product.location}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">👨‍🌾 农户信息</div>
+                        <div class="info-value">${product.farmer}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">📅 采摘日期</div>
+                        <div class="info-value">${product.harvestDate}</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">🔍 查询时间</div>
+                        <div class="info-value">${new Date().toLocaleString()}</div>
+                    </div>
+                </div>
+
+                <div class="trace-timeline">
+                    <h3 class="timeline-title">🌱 种植过程</h3>
+                    <div class="timeline">
+                        ${product.planting.map(item => `
+                            <div class="timeline-item">
+                                <div class="timeline-time">${item.time}</div>
+                                <div class="timeline-desc">${item.desc}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="trace-timeline">
+                    <h3 class="timeline-title">🏭 加工过程</h3>
+                    <div class="timeline">
+                        ${product.processing.map(item => `
+                            <div class="timeline-item">
+                                <div class="timeline-time">${item.time}</div>
+                                <div class="timeline-desc">${item.desc}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="trace-timeline">
+                    <h3 class="timeline-title">🚚 物流过程</h3>
+                    <div class="timeline">
+                        ${product.logistics.map(item => `
+                            <div class="timeline-item">
+                                <div class="timeline-time">${item.time}</div>
+                                <div class="timeline-desc">${item.desc}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="blockchain-section">
+                    <h2 class="blockchain-title">🔒 区块链验证</h2>
+                    <div class="verification-badge">${product.blockchain.status}</div>
+                    <div class="hash-display">
+                        区块链哈希: ${product.blockchain.hash}
+                    </div>
+                    <div>验证时间戳: ${product.blockchain.timestamp}</div>
+                </div>
+            `;
+        }
+
+        // 搜索溯源信息
+        function searchTrace() {
+            const traceId = document.getElementById('traceId').value.trim();
+
+            // 隐藏所有区域
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            // 模拟加载延迟
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+
+                const product = traceData[traceId];
+
+                if (product) {
+                    document.getElementById('result').innerHTML = renderResult(product);
+                    document.getElementById('result').style.display = 'block';
+                } else {
+                    document.getElementById('error-message').textContent = `未找到溯源码 "${traceId}" 的相关信息，请检查溯源码是否正确。`;
+                    document.getElementById('error').style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        // 页面加载时自动查询
+        window.onload = function() {
+            const traceId = getTraceIdFromUrl();
+            if (traceId) {
+                document.getElementById('traceId').value = traceId;
+                searchTrace();
+            }
+        };
+
+        // 回车键搜索
+        document.getElementById('traceId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTrace();
+            }
+        });
+    </script>
+</body>
+</html>

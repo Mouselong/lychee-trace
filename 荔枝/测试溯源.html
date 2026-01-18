@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试溯源查询</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .test-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 10px;
+            transition: background 0.3s;
+            font-size: 16px;
+        }
+        .test-btn:hover {
+            background: #5a6fd8;
+        }
+        .info {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .url-display {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 溯源查询测试</h1>
+
+        <div class="info">
+            <h3>测试说明</h3>
+            <p>点击下方按钮测试不同的溯源查询：</p>
+        </div>
+
+        <div>
+            <a href="溯源查询.html?id=LC20240117001" class="test-btn">
+                测试妃子笑荔枝<br>
+                <small>LC20240117001</small>
+            </a>
+            <a href="溯源查询.html?id=LC20240117002" class="test-btn">
+                测试桂味荔枝<br>
+                <small>LC20240117002</small>
+            </a>
+        </div>
+
+        <div>
+            <a href="溯源查询.html" class="test-btn" style="background: #dc3545;">
+                测试无参数<br>
+                <small>(应该显示错误)</small>
+            </a>
+        </div>
+
+        <div class="info">
+            <h3>URL格式说明</h3>
+            <p>正确的URL格式应该是：</p>
+            <div class="url-display">
+                溯源查询.html?id=LC20240117001
+            </div>
+            <div class="url-display">
+                溯源查询.html?id=LC20240117002
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="二维码演示.html" class="test-btn" style="background: #28a745;">返回演示页面</a>
+        </div>
+    </div>
+</body>
+</html>
